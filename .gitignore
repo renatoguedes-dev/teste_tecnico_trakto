@@ -1,0 +1,12 @@
+# Dependências
+node_modules/
+dist/
+
+# Arquivos de ambiente
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.env.local
+.env.*.local
