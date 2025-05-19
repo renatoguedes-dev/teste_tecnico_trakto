@@ -10,3 +10,5 @@ dist/
 .env.production
 .env.local
 .env.*.local
+
+uploads/
