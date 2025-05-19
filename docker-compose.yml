@@ -1,4 +1,38 @@
 services:
+  server:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: teste_trakto_node:22-alpine
+    container_name: backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/app
+    command: >
+      sh -c "npm install && npm run dev"
+    environment:
+      - PORT=3000
+      - MONGODB_URI=mongodb://mongodb:27017/image-optimization
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+      - RABBITMQ_QUEUE_NAME=image-processing
+      - UPLOAD_DIR=uploads
+      - PROCESSED_DIR=processed
+    depends_on:
+      - mongodb
+      - rabbitmq
+    restart: unless-stopped
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_configdb:/data/configdb
+    restart: unless-stopped
+
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: rabbitmq
@@ -10,6 +44,11 @@ services:
       RABBITMQ_DEFAULT_PASS: guest
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+      - rabbitmq_logs:/var/log/rabbitmq
+    restart: unless-stopped
 
 volumes:
+  mongodb_data:
+  mongodb_configdb:
   rabbitmq_data:
+  rabbitmq_logs:
