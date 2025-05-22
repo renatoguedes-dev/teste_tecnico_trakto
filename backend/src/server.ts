@@ -10,7 +10,7 @@ import ErrorHandler from "./middlewares/ErrorHandler";
 import { connectToMongoDB } from "./config/database";
 
 // Create upload directories if they don't exist
-const uploadDir = process.env.UPLOAD_DIR || "uploads";
+const uploadDir = path.join(__dirname, "..", process.env.UPLOAD_DIR || "uploads");
 const originalDir = path.join(uploadDir, "original");
 const processedDir = path.join(uploadDir, "processed");
 
@@ -19,6 +19,7 @@ const foldersArray = [uploadDir, originalDir, processedDir];
 foldersArray.forEach((dir) => {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
+    console.log({ dir });
   }
 });
 
@@ -47,5 +48,3 @@ server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 // Import and start the worker
 import "./workers/imageProcessor";
-
-
