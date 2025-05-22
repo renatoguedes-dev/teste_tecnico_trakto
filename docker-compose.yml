@@ -8,9 +8,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./backend:/app
-    command: >
-      sh -c "npm install && npm run dev"
+      - ./backend/uploads:/app/uploads
     environment:
       - PORT=3000
       - MONGODB_URI=mongodb://mongodb:27017/image-optimization
