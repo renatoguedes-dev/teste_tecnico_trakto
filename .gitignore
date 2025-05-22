@@ -1,6 +1,7 @@
 # Dependências
 node_modules/
 dist/
+mongodb-playground/
 
 # Arquivos de ambiente
 .env

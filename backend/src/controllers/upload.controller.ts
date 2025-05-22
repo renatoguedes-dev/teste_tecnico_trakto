@@ -21,11 +21,9 @@ class UploadController {
     }
 
     try {
-      const task_id = req.file.filename.split(".")[0];
+      const result = await UploadServiceFactory.sendToQueue(req.file);
 
-      await UploadServiceFactory.sendToQueue(req.file);
-
-      res.status(202).json({ task_id, status: "PENDING" });
+      res.status(202).json(result);
     } catch (err: any) {
       res.status(500).json({ error: "Failed to process image upload" });
     }

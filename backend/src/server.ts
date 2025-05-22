@@ -7,6 +7,7 @@ import path from "path";
 import express from "express";
 import uploadRouter from "./routes/upload.routes";
 import ErrorHandler from "./middlewares/ErrorHandler";
+import { connectToMongoDB } from "./config/database";
 
 // Create upload directories if they don't exist
 const uploadDir = process.env.UPLOAD_DIR || "uploads";
@@ -39,8 +40,12 @@ server.get("/health", (req, res) => {
 // handle all errors
 server.use(ErrorHandler);
 
+// Connect to MongoDB
+connectToMongoDB();
+
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 // Import and start the worker
 import "./workers/imageProcessor";
+
 
