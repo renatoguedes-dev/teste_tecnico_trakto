@@ -2,7 +2,7 @@ import { Request } from "express";
 import fs from "fs/promises";
 import sharp from "sharp";
 
-async function checkForVirus(req: Request): Promise<Boolean> {
+async function checkForMetadata(req: Request): Promise<Boolean> {
   const filePath = req.file!.path;
 
   try {
@@ -15,7 +15,7 @@ async function checkForVirus(req: Request): Promise<Boolean> {
       return false;
     }
 
-    // valid file with no virus
+    // valid metadata
     return true;
   } catch (err) {
     // Invalid or corrupted file -> deletes file and returns error
@@ -27,4 +27,4 @@ async function checkForVirus(req: Request): Promise<Boolean> {
   }
 }
 
-export default checkForVirus;
+export default checkForMetadata;
