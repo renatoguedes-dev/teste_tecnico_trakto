@@ -1,4 +1,4 @@
-import { Router, Request, Response } from "express";
+import { Router } from "express";
 import UploadController from "../controllers/upload.controller";
 
 const uploadController = new UploadController();

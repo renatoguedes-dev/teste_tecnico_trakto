@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { createImageUploadConfig } from "../utils/upload.utils";
 import { UploadServiceFactory } from "../factories/upload.service.factory";
-import checkForVirus from "../utils/checkForMetadata.utils";
 
 class UploadController {
   private uploadDir: string;

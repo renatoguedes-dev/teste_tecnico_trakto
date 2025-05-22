@@ -6,6 +6,7 @@ import cors from "cors";
 import path from "path";
 import express from "express";
 import uploadRouter from "./routes/upload.routes";
+import statusRouter from "./routes/status.routes";
 import ErrorHandler from "./middlewares/ErrorHandler";
 import { connectToMongoDB } from "./config/database";
 
@@ -33,6 +34,7 @@ server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 
 server.use("/api/upload", uploadRouter);
+server.use("/api/status", statusRouter);
 
 server.get("/health", (req, res) => {
   res.status(200).json({ status: "ok" });
