@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import RabbitMQService from "../services/rabbitmq.service";
 import { RabbitMQServiceFactory } from "../factories/rabbitmq.service.factory";
+import { ImageProcessingServiceFactory } from "../factories/imageProcessing.service.factory";
 
 dotenv.config();
 
@@ -34,18 +35,16 @@ class ImageProcessorWorker {
       await this.rabbitMQService.consumeFromQueue(async (message) => {
         console.log("Received message:", message);
 
-
         const { taskId, path: filePath, originalname } = message;
 
         if (!taskId || !filePath || !originalname) {
           throw new Error("Invalid message format: missing required fields");
         }
 
-        console.log({ taskId, filePath, originalname });
+        // Process the image
+        await ImageProcessingServiceFactory.processImage(taskId, filePath, originalname);
 
-        //TODO set up logic to process image
-
-        setTimeout(() => console.log("Successfully processed image."), 5000);
+        console.log(`Successfully processed image: ${originalname}`);
       });
     } catch (err: any) {
       console.error("Error in consumer:", err);
