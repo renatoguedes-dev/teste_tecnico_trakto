@@ -3,13 +3,4 @@ node_modules/
 dist/
 mongodb-playground/
 
-# Arquivos de ambiente
-.env
-.env.local
-.env.development
-.env.test
-.env.production
-.env.local
-.env.*.local
-
 uploads/
