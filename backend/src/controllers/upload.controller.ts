@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { createImageUploadConfig } from "../utils/upload.utils";
 import { UploadServiceFactory } from "../factories/upload.service.factory";
+import checkForVirus from "../utils/checkForVirus.utils";
 
 class UploadController {
   private uploadDir: string;
@@ -19,11 +20,22 @@ class UploadController {
       return;
     }
 
-    const task_id = req.file.filename.split(".")[0];
+    try {
+      const fileIsClean = await checkForVirus(req);
 
-    const result = await UploadServiceFactory.sendToQueue(req.file);
+      if (!fileIsClean) {
+        res.status(400).json({ error: "Invalid or corrupted file" });
+        return;
+      }
 
-    res.status(200).json({ task_id, status: "PENDING" });
+      const task_id = req.file.filename.split(".")[0];
+
+      await UploadServiceFactory.sendToQueue(req.file);
+
+      res.status(202).json({ task_id, status: "PENDING" });
+    } catch (err: any) {
+      res.status(500).json({ error: "Failed to process image upload" });
+    }
   }
 }
 

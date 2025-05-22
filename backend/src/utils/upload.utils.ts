@@ -17,29 +17,17 @@ export function createImageUploadConfig(uploadDir: string) {
   });
 
   const fileFilter = (req: Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
-    const allowedFileTypes = {
-      "image/jpeg": [".jpg", ".jpeg"],
-      "image/png": [".png"],
-      "image/gif": [".gif"],
-      "image/webp": [".webp"],
-    };
+    const allowedMimes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
 
-    const allowedExtensions = Object.values(allowedFileTypes).flat();
+    if (!allowedMimes.includes(file.mimetype)) {
+      const err = new multer.MulterError("LIMIT_UNEXPECTED_FILE", file.fieldname);
 
-    function verifyExtensions() {
-      let extension = path.extname(file.originalname);
+      err.message = "Only image files are allowed";
 
-      if (allowedExtensions.includes(extension)) {
-        cb(null, true);
-      } else {
-        const err = new multer.MulterError("LIMIT_UNEXPECTED_FILE", file.fieldname);
-        err.message = "Only image files are allowed";
-
-        cb(err);
-      }
+      return cb(err);
     }
 
-    verifyExtensions();
+    cb(null, true);
   };
 
   const maxSize = parseInt(process.env.MAX_FILE_SIZE || "10485760", 10);

@@ -34,6 +34,16 @@ class ImageProcessorWorker {
       await this.rabbitMQService.consumeFromQueue(async (message) => {
         console.log("Received message:", message);
 
+
+        const taskId = message.filename.split(".")[0];
+        const { path: filePath, originalname } = message;
+
+        if (!taskId || !filePath || !originalname) {
+          throw new Error("Invalid message format: missing required fields");
+        }
+
+        console.log({ taskId, filePath, originalname });
+        
         //TODO set up logic to process image
 
         setTimeout(() => console.log("Successfully processed image."), 5000);
